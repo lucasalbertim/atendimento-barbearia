@@ -1,0 +1,8 @@
+<!-- templates/list_servicos.html -->
+<h1>Serviços Disponíveis</h1>
+<ul>
+    {% for servico in servicos %}
+    <li>{{ servico.nome }} - R$ {{ servico.preco }} - {{ servico.tempo_estimado }} min</li>
+    {% endfor %}
+</ul>
+<a href="{{ url_for('main.add_servico') }}">Adicionar Novo Serviço</a>

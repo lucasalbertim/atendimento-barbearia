@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Serviços</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Seleção de Serviços</h1>
+        <nav>
+            <ul>
+                <li><a href="/">Início</a></li>
+                <li><a href="/clientes">Cadastro de Clientes</a></li>
+                <li><a href="/relatorios">Relatórios</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section>
+            <h2>Escolha os serviços desejados</h2>
+            <form action="/servicos" method="POST">
+                <label for="servicos">Serviços:</label>
+                <select id="servicos" name="servicos" multiple required>
+                    <option value="corte">Corte</option>
+                    <option value="barba">Barba</option>
+                    <option value="luzes">Luzes</option>
+                    <option value="canto">Canto</option>
+                </select>
+
+                <label for="pagamento">Forma de Pagamento:</label>
+                <select id="pagamento" name="pagamento" required>
+                    <option value="credito">Crédito</option>
+                    <option value="debito">Débito</option>
+                    <option value="pix">Pix</option>
+                    <option value="avista">À Vista</option>
+                </select>
+
+                <button type="submit">Confirmar</button>
+            </form>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 Barbearia Automatizada. Todos os direitos reservados.</p>
+    </footer>
+</body>
+</html>

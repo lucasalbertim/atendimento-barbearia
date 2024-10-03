@@ -1,0 +1,19 @@
+<!-- templates/add_visita.html -->
+<h1>Adicionar Visita</h1>
+<form method="POST">
+    Cliente:
+    <select name="cliente_id">
+        {% for cliente in clientes %}
+        <option value="{{ cliente.id }}">{{ cliente.nome }}</option>
+        {% endfor %}
+    </select><br>
+
+    Serviço:
+    <select name="servico_id">
+        {% for servico in servicos %}
+        <option value="{{ servico.id }}">{{ servico.nome }} - {{ servico.tempo_estimado }} min</option>
+        {% endfor %}
+    </select><br>
+
+    <input type="submit" value="Cadastrar Visita">
+</form>

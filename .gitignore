@@ -1,0 +1,10 @@
+__pycache__/
+*.py[cod]
+.env
+*.db
+*.sqlite3
+.DS_Store
+.vscode/
+/venv/
+/docker-compose.yml
+/Dockerfile
