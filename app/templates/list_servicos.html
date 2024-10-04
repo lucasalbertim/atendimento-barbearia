@@ -1,8 +1,37 @@
-<!-- templates/list_servicos.html -->
-<h1>Serviços Disponíveis</h1>
-<ul>
-    {% for servico in servicos %}
-    <li>{{ servico.nome }} - R$ {{ servico.preco }} - {{ servico.tempo_estimado }} min</li>
-    {% endfor %}
-</ul>
-<a href="{{ url_for('main.add_servico') }}">Adicionar Novo Serviço</a>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Serviços</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center">Serviços Disponíveis</h1>
+        <table class="table table-bordered mt-4">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Preço</th>
+                    <th>Tempo Estimado</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for servico in servicos %}
+                    <tr>
+                        <td>{{ servico.nome }}</td>
+                        <td>R$ {{ servico.preco }}</td>
+                        <td>{{ servico.tempo_estimado }} minutos</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <a href="/add_servico" class="btn btn-primary">Adicionar Novo Serviço</a>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
