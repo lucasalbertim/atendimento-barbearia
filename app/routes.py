@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for
-from app import db
 from datetime import datetime
-from app.models import Cliente, Visita, Servico, Pagamento
+from . import db  # Importação relativa
+from .models import Cliente, Visita, Servico, Pagamento
 
 bp = Blueprint('main', __name__)
 
@@ -22,7 +22,6 @@ def add_cliente():
         return redirect(url_for('main.index'))
     return render_template('add_cliente.html')
 
-# Rota para adicionar serviços
 @bp.route('/add_servico', methods=['GET', 'POST'])
 def add_servico():
     if request.method == 'POST':
@@ -35,13 +34,11 @@ def add_servico():
         return redirect(url_for('main.list_servicos'))
     return render_template('add_servico.html')
 
-# Rota para listar serviços
 @bp.route('/servicos')
 def list_servicos():
     servicos = Servico.query.all()
     return render_template('list_servicos.html', servicos=servicos)
 
-# Rota para registrar pagamento
 @bp.route('/add_pagamento', methods=['POST'])
 def add_pagamento():
     visita_id = request.form['visita_id']
@@ -51,13 +48,11 @@ def add_pagamento():
     db.session.commit()
     return redirect(url_for('main.list_pagamentos'))
 
-# Rota para listar pagamentos
 @bp.route('/pagamentos')
 def list_pagamentos():
     pagamentos = Pagamento.query.all()
     return render_template('list_pagamentos.html', pagamentos=pagamentos)
 
-# Rota para gerar relatório de visitas por período
 @bp.route('/relatorio', methods=['GET', 'POST'])
 def relatorio():
     if request.method == 'POST':
@@ -73,14 +68,12 @@ def relatorio():
     
     return render_template('relatorio_form.html')
 
-# Rota para exibir as métricas de visita de um cliente
 @bp.route('/cliente/<int:cliente_id>')
 def cliente_visitas(cliente_id):
     cliente = Cliente.query.get_or_404(cliente_id)
     total_visitas = Visita.query.filter_by(cliente_id=cliente.id).count()
     return render_template('cliente_visitas.html', cliente=cliente, total_visitas=total_visitas)
 
-# Rota para adicionar uma visita e calcular tempo de espera
 @bp.route('/add_visita', methods=['GET', 'POST'])
 def add_visita():
     if request.method == 'POST':
@@ -103,22 +96,31 @@ def add_visita():
     servicos = Servico.query.all()
     return render_template('add_visita.html', clientes=clientes, servicos=servicos)
 
-# Rota para exibir projeção de ganhos futuros
 @bp.route('/projecao_ganhos')
 def projecao_ganhos():
     # Calcular soma dos valores dos serviços realizados
     visitas = Visita.query.all()
-    total_ganho = 0
-    for visita in visitas:
-        servico = Servico.query.get(visita.servico_id)
-        total_ganho += servico.preco
+    total_ganho = sum(Servico.query.get(visita.servico_id).preco for visita in visitas)
 
-    # Projeção: se continuar na mesma média de visitas
-    media_visitas = len(visitas) / max(1, (datetime.utcnow() - visitas[0].data).days)  # Média de visitas por dia
-    projecao_mensal = media_visitas * 30 * servico.preco  # Projeção para 30 dias
+    # Calcular total de visitas
+    total_visitas = len(visitas)
+
+    # Se não houver visitas, retorne 0 para a projeção
+    if total_visitas == 0:
+        return render_template('projecao_ganhos.html', total_ganho=total_ganho, projecao_mensal=0)
+
+    # Calcular a data mais antiga de visita
+    data_mais_antiga = min(visita.data for visita in visitas)
+    dias_decorridos = (datetime.now() - data_mais_antiga).days or 1  # Evitar divisão por zero
+
+    # Média de visitas por dia
+    media_visitas = total_visitas / dias_decorridos
+
+    # Obter todos os serviços para calcular a projeção
+    servicos = Servico.query.all()
+    preco_servico = sum(servico.preco for servico in servicos) / max(1, len(servicos)) if servicos else 0
+
+    # Projeção para 30 dias
+    projecao_mensal = media_visitas * 30 * preco_servico
 
     return render_template('projecao_ganhos.html', total_ganho=total_ganho, projecao_mensal=projecao_mensal)
-
-
-
-
