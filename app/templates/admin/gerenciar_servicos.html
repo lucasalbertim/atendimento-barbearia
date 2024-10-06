@@ -1,0 +1,20 @@
+<!-- templates/admin/gerenciar_servicos.html -->
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Gerenciar Serviços</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    {% include 'navbar.html' %}
+    
+    <div class="container">
+        <h1>Gerenciar Serviços</h1>
+        <ul>
+            <li><a href="{{ url_for('admin.add_servico') }}">Adicionar Serviço</a></li>
+            <li><a href="{{ url_for('admin.listar_servicos') }}">Listar/Editar Serviços</a></li>
+        </ul>
+    </div>
+</body>
+</html>

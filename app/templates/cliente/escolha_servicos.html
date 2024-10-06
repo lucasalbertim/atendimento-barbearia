@@ -1,0 +1,27 @@
+<!-- templates/cliente/escolha_servico.html -->
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Escolha de Serviços</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    {% include 'navbar.html' %}
+    
+    <div class="container">
+        <h2>Escolha de Serviços</h2>
+        <form action="{{ url_for('cliente.confirmar_servicos') }}" method="POST">
+            <label for="servicos">Selecione os serviços:</label>
+            <select multiple name="servicos">
+                {% for servico in servicos %}
+                    <option value="{{ servico.id }}">{{ servico.nome }} - R$ {{ servico.preco }}</option>
+                {% endfor %}
+            </select>
+            
+            <button type="submit">Confirmar</button>
+        </form>
+    </div>
+</body>
+</html>

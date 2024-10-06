@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Administrativo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <h1>Painel Administrativo</h1>
+
+    <div class="metrics-container">
+        <div class="metric">
+            <h2>Total de Clientes</h2>
+            <p>{{ total_clientes }}</p>
+        </div>
+        <div class="metric">
+            <h2>Total de Visitas</h2>
+            <p>{{ total_visitas }}</p>
+        </div>
+        <div class="metric">
+            <h2>Receita Total</h2>
+            <p>R$ {{ receita_total }}</p>
+        </div>
+        <div class="metric">
+            <h2>Média de Visitas por Cliente</h2>
+            <p>{{ media_visitas_por_cliente }}</p>
+        </div>
+        <div class="metric">
+            <h2>Percentual de Retenção de Clientes</h2>
+            <p>{{ percentual_retentivo }}%</p>
+        </div>
+    </div>
+
+    <div class="projections">
+        <h2>Projeção de Ganhos Mensal</h2>
+        <p>R$ {{ projecao_mensal }}</p>
+    </div>
+
+    <!-- Gráficos -->
+    <div class="charts-container">
+        <h2>Gráficos</h2>
+        <canvas id="visitasChart" width="400" height="200"></canvas>
+        <canvas id="servicosChart" width="400" height="200"></canvas>
+        <canvas id="receitaChart" width="400" height="200"></canvas>
+        <canvas id="clientesChart" width="400" height="200"></canvas>
+    </div>
+
+    <a href="{{ url_for('main.relatorio') }}">Ver Relatórios Detalhados</a>
+
+    <script>
+        var ctxVisitas = document.getElementById('visitasChart').getContext('2d');
+        var visitasChart = new Chart(ctxVisitas, {
+            type: 'bar',
+            data: {
+                labels: {{ labels | safe }},
+                datasets: [{
+                    label: 'Visitas por Mês',
+                    data: {{ data | safe }},
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        var ctxServicos = document.getElementById('servicosChart').getContext('2d');
+        var servicosChart = new Chart(ctxServicos, {
+            type: 'pie',
+            data: {
+                labels: {{ servicos_labels | safe }},
+                datasets: [{
+                    label: 'Serviços mais Utilizados',
+                    data: {{ servicos_data | safe }},
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true
+            }
+        });
+
+        var ctxReceita = document.getElementById('receitaChart').getContext('2d');
+        var receitaChart = new Chart(ctxReceita, {
+            type: 'line',
+            data: {
+                labels: {{ receita_labels | safe }},
+                datasets: [{
+                    label: 'Receita Mensal',
+                    data: {{ receita_data | safe }},
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        var ctxClientes = document.getElementById('clientesChart').getContext('2d');
+        var clientesChart = new Chart(ctxClientes, {
+            type: 'pie',
+            data: {
+                labels: ['Ativos', 'Inativos'],
+                datasets: [{
+                    label: 'Clientes Ativos vs Inativos',
+                    data: [{{ clientes_ativos }}, {{ clientes_inativos }}],
+                    backgroundColor: [
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(255, 99, 132, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(255, 99, 132, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true
+            }
+        });
+    </script>
+</body>
+</html>

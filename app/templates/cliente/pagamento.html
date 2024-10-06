@@ -1,0 +1,28 @@
+<!-- templates/cliente/pagamento.html -->
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Pagamento</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    {% include 'navbar.html' %}
+    
+    <div class="container">
+        <h2>Pagamento</h2>
+        <form action="{{ url_for('cliente.finalizar_pagamento') }}" method="POST">
+            <label for="metodo_pagamento">Escolha o método de pagamento:</label>
+            <select id="metodo_pagamento" name="metodo_pagamento">
+                <option value="credito">Cartão de Crédito</option>
+                <option value="debito">Cartão de Débito</option>
+                <option value="pix">Pix</option>
+                <option value="avista">À Vista</option>
+            </select>
+            
+            <button type="submit">Finalizar Pagamento</button>
+        </form>
+    </div>
+</body>
+</html>

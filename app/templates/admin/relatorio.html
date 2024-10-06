@@ -1,0 +1,49 @@
+<!-- templates/admin/relatorio.html -->
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Relatório de Visitas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    {% include 'navbar.html' %}
+    
+    <div class="container">
+        <h2>Relatório de Visitas</h2>
+        <form action="{{ url_for('admin.gerar_relatorio') }}" method="POST">
+            <label for="data_inicio">Data de Início:</label>
+            <input type="date" id="data_inicio" name="data_inicio" required>
+            
+            <label for="data_fim">Data de Fim:</label>
+            <input type="date" id="data_fim" name="data_fim" required>
+            
+            <button type="submit">Gerar Relatório</button>
+        </form>
+
+        <!-- Aqui vai o relatório gerado -->
+        {% if relatorio %}
+            <h3>Relatório Gerado</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Data</th>
+                        <th>Cliente</th>
+                        <th>Serviço</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for linha in relatorio %}
+                        <tr>
+                            <td>{{ linha.data }}</td>
+                            <td>{{ linha.cliente }}</td>
+                            <td>{{ linha.servico }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    </div>
+</body>
+</html>
